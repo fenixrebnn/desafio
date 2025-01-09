@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Emissão de Nota Fiscal</title>
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; padding: 20px;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px;">
+            <h1 class="text-center mb-4">Formulário Nota Fiscal</h1>
+            <form id="nfse-form">
+                <div class="mb-3">
+                    <label>Valor da Venda:</label>
+                    <input type="number" placeholder="Digite o valor da venda" id="valorVenda" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Itens Vendidos:</label>
+                    <input type="text" placeholder="Digite os itens vendidos" id="itens" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Porcentagem do IRPF (%):</label>
+                    <input type="number" placeholder="Digite a porcentagem do imposto(IRPF)" id="irpf" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Porcentagem do PIS (%):</label>
+                    <input type="number" placeholder="Digite a porcentagem do imposto(PIS)" id="pis" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Porcentagem do COFINS (%):</label>
+                    <input type="number" placeholder="Digite a porcentagem do imposto (COFINS)" id="cofins" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Porcentagem do INSS (%):</label>
+                    <input type="number" placeholder="Digite a porcentagem do imposto(INSS)" id="inss" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Porcentagem do ISSQN (%):</label>
+                    <input type="number" placeholder="Digite a porcentagem do imposto(ISSQN)" id="issqn" class="form-control" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-success w-100" onclick="gerarNotaFiscal()">Gerar Nota Fiscal</button>
+                </div>
+            </form>
+            <div id="resultado" class="mt-4" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        function gerarNotaFiscal() {
+            var valorVenda = parseFloat(document.getElementById('valorVenda').value);
+            var itens = document.getElementById('itens').value.split(',');
+            var irpf = parseFloat(document.getElementById('irpf').value);
+            var pis = parseFloat(document.getElementById('pis').value);
+            var cofins = parseFloat(document.getElementById('cofins').value);
+            var inss = parseFloat(document.getElementById('inss').value);
+            var issqn = parseFloat(document.getElementById('issqn').value);
+
+            var impostoIRPF = (valorVenda * irpf) / 100;
+            var impostoPIS = (valorVenda * pis) / 100;
+            var impostoCOFINS = (valorVenda * cofins) / 100;
+            var impostoINSS = (valorVenda * inss) / 100;
+            var impostoISSQN = (valorVenda * issqn) / 100;
+
+            var totalImpostos = impostoIRPF + impostoPIS + impostoCOFINS + impostoINSS + impostoISSQN;
+            var valorLiquido = valorVenda - totalImpostos;
+
+            var resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = '<h1>Nota Fiscal</h1>' +
+                                     '<p><strong>Valor da Venda:</strong> R$ ' + valorVenda.toFixed(2) + '</p>' +
+                                     '<p><strong>Itens Vendidos:</strong> ' + itens.join(', ') + '</p>' +
+                                     '<p><strong>Impostos:</strong></p>' +
+                                     '<ul>' +
+                                     '<li>IRPF: R$ ' + impostoIRPF.toFixed(2) + '</li>' +
+                                     '<li>PIS: R$ ' + impostoPIS.toFixed(2) + '</li>' +
+                                     '<li>COFINS: R$ ' + impostoCOFINS.toFixed(2) + '</li>' +
+                                     '<li>INSS: R$ ' + impostoINSS.toFixed(2) + '</li>' +
+                                     '<li>ISSQN: R$ ' + impostoISSQN.toFixed(2) + '</li>' +
+                                     '</ul>' +
+                                     '<p><strong>Total de Impostos:</strong> R$ ' + totalImpostos.toFixed(2) + '</p>' +
+                                     '<p><strong>Valor Líquido:</strong> R$ ' + valorLiquido.toFixed(2) + '</p>';
+        }
+    </script>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
